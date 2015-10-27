@@ -7,9 +7,9 @@ Group:		Applications/Networking
 Source0:	http://dev.mysql.com/get/Downloads/MySQL-Router/%{name}-%{version}.tar.gz
 # Source0-md5:	de7f65e9a61f939e0c4bab7c251d9763
 URL:		http://dev.mysql.com/doc/mysql-router/en/
-BuildRequires:	cmake
+BuildRequires:	cmake >= 2.8.9
 BuildRequires:	doxygen
-BuildRequires:	libstdc++-devel
+BuildRequires:	libstdc++-devel >= 6:4.7
 BuildRequires:	mysql-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
