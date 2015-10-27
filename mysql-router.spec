@@ -9,6 +9,8 @@ Source0:	http://dev.mysql.com/get/Downloads/MySQL-Router/%{name}-%{version}.tar.
 URL:		http://dev.mysql.com/doc/mysql-router/en/
 BuildRequires:	cmake
 BuildRequires:	doxygen
+BuildRequires:	libstdc++-devel
+BuildRequires:	mysql-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
