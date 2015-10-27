@@ -1,5 +1,4 @@
 # TODO
-# - fix libdir
 # - fix shared libs SONAME
 Summary:	MySQL Router
 Name:		mysql-router
@@ -31,7 +30,9 @@ enables developers to extend MySQL Router for custom use cases.
 %build
 install -d build
 cd build
-%cmake ..
+%cmake \
+	-DINSTALL_LIBDIR=%{_libdir} \
+	..
 %{__make}
 
 %install
@@ -40,9 +41,6 @@ rm -rf $RPM_BUILD_ROOT
 	DESTDIR=$RPM_BUILD_ROOT
 
 %{__rm} -r $RPM_BUILD_ROOT%{_docdir}/mysqlrouter
-
-# TODO: fix build instead
-%define	_libdir	%{_prefix}/lib
 
 # no -devel yet
 %{__rm} -r $RPM_BUILD_ROOT%{_includedir}/mysql/mysqlrouter
