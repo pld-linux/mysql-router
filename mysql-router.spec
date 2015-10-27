@@ -1,5 +1,9 @@
 # TODO
 # - fix shared libs SONAME
+# - user (use mysql user like upstream .spec does)
+# - file/dir permissions (configs will likely contain passwords?)
+# - services (systemd, init.d)
+# - logrotate
 Summary:	MySQL Router
 Name:		mysql-router
 Version:	2.0.2
@@ -42,6 +46,13 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+install -d $RPM_BUILD_ROOT%{_localstatedir}/{log,run}/mysqlrouter \
+	$RPM_BUILD_ROOT{%{systemdunitdir},%{systemdtmpfilesdir},%{_sysconfdir}/mysqlrouter}
+
+cp -p build/packaging/rpm-oel/mysqlrouter.service $RPM_BUILD_ROOT%{systemdunitdir}/mysqlrouter.service
+cp -p build/packaging/rpm-oel/mysqlrouter.tmpfiles.d $RPM_BUILD_ROOT%{systemdtmpfilesdir}/mysqlrouter.conf
+cp -p build/packaging/rpm-oel/mysqlrouter.ini $RPM_BUILD_ROOT%{_sysconfdir}/mysqlrouter/mysqlrouter.ini
+
 # no -devel yet
 %{__rm} -r $RPM_BUILD_ROOT%{_includedir}/mysql/mysqlrouter
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/libmysqlharness.a
@@ -57,6 +68,8 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc README.txt License.txt
+%dir %{_sysconfdir}/mysqlrouter
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/mysqlrouter/mysqlrouter.ini
 %attr(755,root,root) %{_sbindir}/mysqlrouter
 %attr(755,root,root) %{_libdir}/libmysqlharness.so.0
 %attr(755,root,root) %{_libdir}/libmysqlrouter.so.1
@@ -65,3 +78,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/mysqlrouter/keepalive.so
 %attr(755,root,root) %{_libdir}/mysqlrouter/logger.so
 %attr(755,root,root) %{_libdir}/mysqlrouter/routing.so
+%{systemdunitdir}/mysqlrouter.service
+%{systemdtmpfilesdir}/mysqlrouter.conf
+%dir %{_localstatedir}/run/mysqlrouter
+%dir %{_localstatedir}/log/mysqlrouter
