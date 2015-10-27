@@ -31,6 +31,7 @@ enables developers to extend MySQL Router for custom use cases.
 install -d build
 cd build
 %cmake \
+	-DINSTALL_LAYOUT=RPM \
 	-DINSTALL_LIBDIR=%{_libdir} \
 	..
 %{__make}
@@ -39,8 +40,6 @@ cd build
 rm -rf $RPM_BUILD_ROOT
 %{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
-
-%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/mysqlrouter
 
 # no -devel yet
 %{__rm} -r $RPM_BUILD_ROOT%{_includedir}/mysql/mysqlrouter
@@ -57,7 +56,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc README.txt License.txt
-%attr(755,root,root) %{_bindir}/mysqlrouter
+%attr(755,root,root) %{_sbindir}/mysqlrouter
 %attr(755,root,root) %{_libdir}/libmysqlharness.so.0
 %attr(755,root,root) %{_libdir}/libmysqlrouter.so.1
 %dir %{_libdir}/mysqlrouter
