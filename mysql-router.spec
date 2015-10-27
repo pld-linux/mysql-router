@@ -1,3 +1,6 @@
+# TODO
+# - fix libdir
+# - fix shared libs SONAME
 Summary:	MySQL Router
 Name:		mysql-router
 Version:	2.0.2
@@ -35,8 +38,31 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/mysqlrouter
+
+# TODO: fix build instead
+%define	_libdir	%{_prefix}/lib
+
+# no -devel yet
+%{__rm} -r $RPM_BUILD_ROOT%{_includedir}/mysql/mysqlrouter
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libmysqlharness.a
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libmysqlharness.so
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libmysqlrouter.so
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post	-p /sbin/ldconfig
+%postun	-p /sbin/ldconfig
+
 %files
 %defattr(644,root,root,755)
+%doc README.txt License.txt
+%attr(755,root,root) %{_bindir}/mysqlrouter
+%attr(755,root,root) %{_libdir}/libmysqlharness.so.0
+%attr(755,root,root) %{_libdir}/libmysqlrouter.so.1
+%dir %{_libdir}/mysqlrouter
+%attr(755,root,root) %{_libdir}/mysqlrouter/fabric_cache.so
+%attr(755,root,root) %{_libdir}/mysqlrouter/keepalive.so
+%attr(755,root,root) %{_libdir}/mysqlrouter/logger.so
+%attr(755,root,root) %{_libdir}/mysqlrouter/routing.so
