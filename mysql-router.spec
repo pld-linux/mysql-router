@@ -33,6 +33,7 @@ cd build
 %cmake \
 	-DINSTALL_LAYOUT=RPM \
 	-DINSTALL_LIBDIR=%{_libdir} \
+	-DWITH_STATIC=no \
 	..
 %{__make}
 
